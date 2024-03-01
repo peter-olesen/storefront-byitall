@@ -95,6 +95,100 @@ function buildNav(categoryData) {
     topNavigationElement.innerHTML = categoryNavHTML
 }
 
+let productCategories = [
+    "smartphones",
+    "laptops",
+    "fragrances",
+    "skincare",
+    "groceries",
+    "home-decoration",
+    "furniture",
+    "tops",
+    "womens-dresses",
+    "womens-shoes",
+    "mens-shirts",
+    "mens-shoes",
+    "mens-watches",
+    "womens-watches",
+    "womens-bags",
+    "womens-jewellery",
+    "sunglasses",
+    "automotive",
+    "motorcycle",
+    "lighting"
+]
+
+categorySorter(productCategories)
+
+function categorySorter(productCategories) {
+
+// Categories
+let electronicsCategory = []
+let cosmeticsCategory = []
+let groceriesCategory = []
+let homeCategory = []
+let womensCategory = []
+let autoCategory = []
+let mensCategory = []
+
+let noCategory = []
+
+productCategories.forEach(category => {
+
+switch (category) {
+    case 'smartphones':
+    case 'laptops':
+        console.log('electronics')
+        electronicsCategory.push(category)
+        break;
+    
+    case 'fragrances':
+    case 'skincare':
+        console.log('cosmetics')
+        cosmeticsCategory.push(category)
+        break;
+
+    case 'groceries':
+        console.log('groceries')
+        groceriesCategory.push(category)
+        break;
+
+    case 'home-decoration':
+    case 'furniture':
+        console.log('home')
+        homeCategory.push(category)
+        break;
+    
+    case 'womens-dresses':
+    case 'womens-shoes':
+    case 'womens-watches':
+    case 'womens-bags':
+    case 'womens-jewellery':
+        console.log('women')
+        womensCategory.push(category)
+        break;
+
+    case 'automotive':
+    case 'motorcycle':
+        console.log('auto');
+        autoCategory.push(category)
+        break;
+
+    case 'mens-shirts':
+    case 'mens-shoes':
+    case 'mens-watches':
+        console.log('men')
+        mensCategory.push(category)
+        break;
+
+    default:
+        console.log(category)
+        noCategory.push(category)
+        break;
+}
+
+})}
+
 // ---------- BUILD END ----------
 
 function navButtonClick(categoryName) {

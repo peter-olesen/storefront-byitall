@@ -1,0 +1,16 @@
+.megaMenu {
+    display: flex;
+    flex-direction: row;
+}
+
+li:first-of-type {
+    display: inline;
+}
+
+li {
+    display: none;
+}
+
+li:nth-last-of-type() {
+    display: inline;
+}
