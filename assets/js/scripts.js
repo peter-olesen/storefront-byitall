@@ -3,6 +3,9 @@ fetchProductData();
 
 const featuredProductsElement = document.getElementById('featuredProducts');
 const topNavigationElement = document.getElementById('pageNavigation');
+const byitallTitle = document.getElementById('byitallTitle');
+
+byitallTitle.onclick = backToFrontPage;
 
 let allProducts = null
 
@@ -51,7 +54,6 @@ function receivedProductData(productData) {
 }
 
 function receivedCategoryData(categoryData) {
-    // Call the categorySorter function after receiving category data
     let megaMenuData = categorySorter(categoryData);
     buildNav(megaMenuData);
 }
@@ -111,7 +113,6 @@ function buildNav(megaMenuData) {
 }
 
 function navButtonClick(categoryName) {
-    // Your logic for handling menu item clicks goes here
     console.log(`Clicked on ${categoryName}`);
 }
 
@@ -139,7 +140,6 @@ let productCategories = [
     "lighting"
 ];
 
-// Define the categorySorter function
 function categorySorter(productCategories) {
     // Categories
     let electronicsCategory = [];
@@ -166,6 +166,7 @@ function categorySorter(productCategories) {
                 break;
             case 'home-decoration':
             case 'furniture':
+            case 'lighting':
                 homeCategory.push(category);
                 break;
             case 'womens-dresses':
@@ -190,7 +191,6 @@ function categorySorter(productCategories) {
         }
     });
 
-    // Define megaMenuData using the sorted categories
     let megaMenuData = [
         {
             mainCategoryName: 'Electronics',
@@ -209,16 +209,20 @@ function categorySorter(productCategories) {
             subCategories: homeCategory
         },
         {
-            mainCategoryName: 'Womens',
+            mainCategoryName: 'Women',
             subCategories: womensCategory
         },
         {
-            mainCategoryName: 'Mens',
+            mainCategoryName: 'Men',
             subCategories: mensCategory
         },
         {
             mainCategoryName: 'Auto',
             subCategories: autoCategory
+        },
+        {
+            mainCategoryName: 'Misc',
+            subCategories: noCategory
         }
     ];
 
@@ -246,7 +250,7 @@ function navButtonClick(categoryName) {
         }
     });
 
-    console.log(categoryProducts);
+    // console.log(categoryProducts);
 
     // let categoryURL = `https://dummyjson.com/products/category/${categoryName}?limit=0`
 
@@ -255,6 +259,11 @@ function navButtonClick(categoryName) {
     clearMain();
     
     buildFeaturedProducts(categoryProducts)
+}
+
+function backToFrontPage() {
+    clearMain();
+    fetchProductData();
 }
 
 // ---------- CLEAR MAIN ----------
