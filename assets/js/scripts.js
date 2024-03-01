@@ -51,8 +51,9 @@ function receivedProductData(productData) {
 }
 
 function receivedCategoryData(categoryData) {
-    // write the sorting code for categories
-    buildNav(categoryData)
+    // Call the categorySorter function after receiving category data
+    let megaMenuData = categorySorter(categoryData);
+    buildNav(megaMenuData);
 }
 
 // function receivedProductsByCategory(productData) {
@@ -83,17 +84,37 @@ function buildFeaturedProducts(featuredCards) {
     });
 }
 
-function buildNav(categoryData) {
-    let categoryNavHTML = ''
+function buildNav(megaMenuData) {
+    const topNavigationElement = document.getElementById('pageNavigation');
+    topNavigationElement.innerHTML = '';
 
-    categoryData.forEach(categoryName => {
+    megaMenuData.forEach(mainCategoryData => {
+        let megaMenuSubCat = '<ul>';
+        mainCategoryData.subCategories.forEach(subCategory => {
+            // Replace dashes with spaces for display only
+            let displayName = subCategory.replace(/-/g, ' ');
 
-        let navButtons = `<button onclick="navButtonClick('${categoryName}')">${categoryName}</button> `
-        categoryNavHTML += navButtons
+            let megaMenuListElement = `<li><a href="#" onclick="navButtonClick('${subCategory}')">${displayName}</a></li>`;
+            megaMenuSubCat += megaMenuListElement;
+        });
+        megaMenuSubCat += '</ul>';
+
+        let megaMenuCategory = `
+            <ul>
+                <li>
+                    <a href="#">${mainCategoryData.mainCategoryName}</a>
+                    ${megaMenuSubCat}
+                </li>
+            </ul>`;
+        topNavigationElement.innerHTML += megaMenuCategory;
     });
-
-    topNavigationElement.innerHTML = categoryNavHTML
 }
+
+function navButtonClick(categoryName) {
+    // Your logic for handling menu item clicks goes here
+    console.log(`Clicked on ${categoryName}`);
+}
+
 
 let productCategories = [
     "smartphones",
@@ -116,82 +137,105 @@ let productCategories = [
     "automotive",
     "motorcycle",
     "lighting"
-]
+];
 
-categorySorter(productCategories)
-
+// Define the categorySorter function
 function categorySorter(productCategories) {
+    // Categories
+    let electronicsCategory = [];
+    let cosmeticsCategory = [];
+    let groceriesCategory = [];
+    let homeCategory = [];
+    let womensCategory = [];
+    let autoCategory = [];
+    let mensCategory = [];
+    let noCategory = [];
 
-// Categories
-let electronicsCategory = []
-let cosmeticsCategory = []
-let groceriesCategory = []
-let homeCategory = []
-let womensCategory = []
-let autoCategory = []
-let mensCategory = []
+    productCategories.forEach(category => {
+        switch (category) {
+            case 'smartphones':
+            case 'laptops':
+                electronicsCategory.push(category);
+                break;
+            case 'fragrances':
+            case 'skincare':
+                cosmeticsCategory.push(category);
+                break;
+            case 'groceries':
+                groceriesCategory.push(category);
+                break;
+            case 'home-decoration':
+            case 'furniture':
+                homeCategory.push(category);
+                break;
+            case 'womens-dresses':
+            case 'womens-shoes':
+            case 'womens-watches':
+            case 'womens-bags':
+            case 'womens-jewellery':
+                womensCategory.push(category);
+                break;
+            case 'automotive':
+            case 'motorcycle':
+                autoCategory.push(category);
+                break;
+            case 'mens-shirts':
+            case 'mens-shoes':
+            case 'mens-watches':
+                mensCategory.push(category);
+                break;
+            default:
+                noCategory.push(category);
+                break;
+        }
+    });
 
-let noCategory = []
+    // Define megaMenuData using the sorted categories
+    let megaMenuData = [
+        {
+            mainCategoryName: 'Electronics',
+            subCategories: electronicsCategory
+        },
+        {
+            mainCategoryName: 'Cosmetics',
+            subCategories: cosmeticsCategory
+        },
+        {
+            mainCategoryName: 'Groceries',
+            subCategories: groceriesCategory
+        },
+        {
+            mainCategoryName: 'Home',
+            subCategories: homeCategory
+        },
+        {
+            mainCategoryName: 'Womens',
+            subCategories: womensCategory
+        },
+        {
+            mainCategoryName: 'Mens',
+            subCategories: mensCategory
+        },
+        {
+            mainCategoryName: 'Auto',
+            subCategories: autoCategory
+        }
+    ];
 
-productCategories.forEach(category => {
-
-switch (category) {
-    case 'smartphones':
-    case 'laptops':
-        console.log('electronics')
-        electronicsCategory.push(category)
-        break;
-    
-    case 'fragrances':
-    case 'skincare':
-        console.log('cosmetics')
-        cosmeticsCategory.push(category)
-        break;
-
-    case 'groceries':
-        console.log('groceries')
-        groceriesCategory.push(category)
-        break;
-
-    case 'home-decoration':
-    case 'furniture':
-        console.log('home')
-        homeCategory.push(category)
-        break;
-    
-    case 'womens-dresses':
-    case 'womens-shoes':
-    case 'womens-watches':
-    case 'womens-bags':
-    case 'womens-jewellery':
-        console.log('women')
-        womensCategory.push(category)
-        break;
-
-    case 'automotive':
-    case 'motorcycle':
-        console.log('auto');
-        autoCategory.push(category)
-        break;
-
-    case 'mens-shirts':
-    case 'mens-shoes':
-    case 'mens-watches':
-        console.log('men')
-        mensCategory.push(category)
-        break;
-
-    default:
-        console.log(category)
-        noCategory.push(category)
-        break;
+    return megaMenuData;
 }
 
-})}
+
+// Call the categorySorter function
+// let megaMenuData = categorySorter(productCategories);
+
+// console.log(megaMenuData);
+
 
 // ---------- BUILD END ----------
 
 function navButtonClick(categoryName) {
+    
     // // console.log(categoryName);
 
     let categoryProducts = []
