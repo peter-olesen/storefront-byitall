@@ -8,14 +8,15 @@ body {
     /* padding-top: 2rem; */
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
 }
 
 .featuredProduct {
-    width: 330px;
     background-color: #D9D9D9;
     border-radius: 10px;
     padding: 10px;
     margin-top: 1rem;
+    width: 330px;
 }
 
 .featuredProduct h2 {
