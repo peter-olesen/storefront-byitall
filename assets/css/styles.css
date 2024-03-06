@@ -1,5 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
 body {
     margin: 0 auto;
+    font-family: "Inter", sans-serif;
+
+}
+
+.pageTitle, #byitallTitle {
+    padding: 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.pageHeader {
+    margin: 0 auto;
+    width: 1200px;
 }
 
 #featuredProducts {
@@ -22,6 +40,7 @@ body {
 .featuredProduct h2 {
     margin: 0;
     padding: 0;
+    cursor: pointer;
 }
 
 .featuredProduct p {
@@ -34,6 +53,7 @@ body {
     height: 200px;
     border: solid 1px #000;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 .featuredHeader {
@@ -60,10 +80,27 @@ body {
 
 .featuredFooter #readMore {
     background-color: #fff;
+    cursor: pointer;
 }
 
 .featuredFooter #addToCart {
     background-color: #00E844;
+    cursor: pointer;
+}
+
+.productImage {
+    height: 200px;
+}
+
+.productView button {
+    width: 160px;
+    height: 50px;
+    margin-top: 5px;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    background-color: #00E844;
+    cursor: pointer;
 }
 
 .pageFooter {
@@ -73,10 +110,21 @@ body {
     border-top: solid 1px #000;
     margin-top: 2rem;
     padding-top: 0.5rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 20%;
     /* position: fixed;
     bottom: 0; */
 }
+
+.footerContainer {
+    margin: 0 auto;
+    width: 1200px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20%;
+}
+
+#cartIcon {
+    max-width: 60px;
+    aspect-ratio: 1/1;
+    cursor: pointer;
+  }

@@ -1,31 +1,33 @@
-fetchCategoryData();
-fetchProductData();
-
 const featuredProductsElement = document.getElementById('featuredProducts');
 const topNavigationElement = document.getElementById('pageNavigation');
+const cartIcon = document.getElementById('cartIcon')
+
 const byitallTitle = document.getElementById('byitallTitle');
 
 byitallTitle.onclick = backToFrontPage;
 
 let allProducts = null
 
+// page load
+InitApp()
+
 // Functions below
 
 // ---------- FETCH START ----------
-
-function fetchCategoryData() {
-    fetch('https://dummyjson.com/products/categories')
-        .then(res => res.json())
-        .then(categoryData => {
-            receivedCategoryData(categoryData);
-        })
-};
 
 function fetchProductData() {
     fetch('https://dummyjson.com/products?limit=0')
         .then(res => res.json())
         .then(productData => {
             receivedProductData(productData);
+        })
+};
+
+function fetchCategoryData() {
+    fetch('https://dummyjson.com/products/categories')
+        .then(res => res.json())
+        .then(categoryData => {
+            receivedCategoryData(categoryData);
         })
 };
 
@@ -75,11 +77,11 @@ function buildFeaturedProducts(featuredCards) {
         <div class="featuredProduct">
             <header class="featuredHeader">
                 <p>${product.brand}</p>
-                <h2>${product.title}</h2>
+                <h2 onclick="clickedProduct(${product.id})">${product.title}</h2>
             </header>
-            <img src="${product.thumbnail}" alt="" class="thumbnail">
+            <img onclick="clickedProduct(${product.id})" src="${product.thumbnail}" alt="" class="thumbnail">
             <footer class="featuredFooter">
-                <button id="readMore">Read More</button><button id="addToCart">Add to Cart</button>
+                <button id="readMore" onclick="clickedProduct(${product.id})">Read More</button><button id="addToCart" onclick="addToCart(${product.id})">Add to Cart</button>
             </footer>`
 
         featuredProductsElement.innerHTML += featuredHTML
@@ -236,6 +238,49 @@ function categorySorter(productCategories) {
 // console.log(megaMenuData);
 
 
+
+function buildProductPage(product) {
+
+    let productHTML = `
+        <section class="productView">
+        <h2>${product.title}</h2>
+    
+        <img class="productImage" src="${product.images[0]}">
+        <h3>Price:<br>USD ${product.price}</h3>
+        <p>${product.description}</p>
+        <button class="addToCart" onclick="addToCart(${product.id})">Add To Cart</button>
+        </section>
+    `
+
+
+    featuredProductsElement.innerHTML = productHTML
+}
+
+function clickedProduct(myId) {
+
+    let myClickedProduct = null
+
+
+    allProducts.forEach(product => {
+
+        if (product.id == myId) {
+            myClickedProduct = product
+        }
+    }
+    )
+
+    if (myClickedProduct == null) {
+        alert('no product')
+    }
+    else {
+        clearMain();
+        buildProductPage(myClickedProduct)
+
+    }
+
+}
+
+
 // ---------- BUILD END ----------
 
 function navButtonClick(categoryName) {
@@ -270,4 +315,159 @@ function backToFrontPage() {
 
 function clearMain() {
     featuredProductsElement.innerHTML = ""
+}
+
+
+
+// Cart code
+
+function initializeCart() {
+    let myCart = localStorage.getItem('myCart')
+
+    if (!myCart) {
+        console.log('no cart');
+
+        let newCart = {
+            products: [],
+            total: 0
+        }
+
+
+        updateCartIcon(0)
+
+        saveCartData(newCart)
+
+    } else {
+
+        let myData = JSON.parse(myCart)
+
+        updateCartIcon(myData.products.length)
+
+    }
+
+}
+
+function addToCart(productId) {
+
+    let myCart = readLocalStorage()
+
+    myCart.products.push(productId);
+
+    updateCartIcon(myCart.products.length)
+
+    saveCartData(myCart)
+}
+
+function cartIconCallback() {
+    let myCart = readLocalStorage()
+
+    let myProducts = []
+
+    myCart.products.forEach(productId => {
+        let myProduct = getProduct(productId)
+        if (myProduct) {
+
+            myProducts.push(myProduct)
+        }
+    });
+
+    buildCart(myProducts)   
+}
+
+function getProduct(id) {
+    let myProduct = false
+    allProducts.forEach(product => {
+        if (id == product.id) {
+            myProduct = product
+        }
+    });
+
+    return myProduct
+}
+
+function ToggleMenu() {
+    let myMenues = document.getElementById('menuLists')
+    myMenues.classList.toggle('hidden')
+
+}
+
+function readLocalStorage() {
+
+    let myCartString = localStorage.getItem('myCart')
+    let myCart = JSON.parse(myCartString)
+    return myCart
+}
+
+function updateCartIcon(items) {
+
+    let myUpdateElement = document.getElementById('cartProductText')
+    myUpdateElement.innerHTML = items
+
+}
+
+function buildCart(products) {
+    clearMain()
+
+    let basketHTML = '<section id="basketWiev">'
+    if (products.length > 0) {
+        products.forEach(product => {
+            // console.log(product);
+
+            let myHTML = `<figure><img src="${product.thumbnail}"><h2>${product.title}</h2><p>PRIS: ${product.price}</p><button onclick="removeFromCart(${product.id})">remove</button></figure>`
+
+
+            basketHTML += myHTML
+        })
+        basketHTML += `<section id="basketTools"><button onclick="paymentCallBack()">Go to payment</button><button onclick="clearCart()">clear basket</button></section>`
+    } else {
+        basketHTML += `<h1>basket empty go buy stuff</h1><button onclick="GetProductData()">OK</button>`
+
+    }
+
+    basketHTML += '</section>'
+
+    featuredProductsElement.innerHTML = basketHTML
+}
+
+
+function saveCartData(cartData) {
+    let mySerializedData = JSON.stringify(cartData)
+    localStorage.setItem('myCart', mySerializedData)
+}
+
+function clearCart() {
+    let newBasket = {
+        products: [],
+        total: 0
+    }
+    updateCartIcon(0)
+    /*   mySerializedData = JSON.stringify(newBasket)
+      localStorage.setItem('myBasket', mySerializedData) */
+
+    saveCartData(newBasket)
+
+    cartIconCallback()
+}
+
+function removeFromCart(id) {
+
+    let myCart = readLocalStorage();    
+
+    myCart.products.forEach((productId, index) => {
+        if (id == productId) {
+            myCart.products.splice(index, 1)
+            return;
+        }
+    });
+
+    saveCartData(myCart);
+
+    cartIconCallback();
+}
+
+function InitApp() {
+
+    fetchProductData();
+    fetchCategoryData();
+    initializeCart();
 }
